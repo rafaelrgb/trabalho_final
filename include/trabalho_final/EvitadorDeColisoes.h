@@ -13,7 +13,7 @@
 #define _EVITADOR_DE_COLISOES_H_
 
 #include "Node.h"
-#include <sensor_msgs/LaserScan.h>
+#include <std_msgs/Float32MultiArray.h>
 #include <geometry_msgs/Twist.h>
 
 namespace trabalho_final
@@ -27,7 +27,7 @@ public:
 
 private:
   virtual void controlLoop();
-  void sonarCb(const sensor_msgs::LaserScanConstPtr& msg);
+  void sonarCb(const std_msgs::Float32MultiArrayConstPtr& msg);
   void cmdVelCb(const geometry_msgs::TwistConstPtr& msg);
   void publishVelocity(double vel_x, double vel_theta);
   ros::Subscriber sonar_sub_;

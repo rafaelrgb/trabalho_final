@@ -6,13 +6,13 @@ project(trabalho_final)
 find_package(catkin REQUIRED COMPONENTS
         roscpp
         geometry_msgs
-        sensor_msgs
+        std_msgs
         nav_msgs
 )
 
 catkin_package(
         INCLUDE_DIRS include
-        CATKIN_DEPENDS roscpp geometry_msgs sensor_msgs nav_msgs
+        CATKIN_DEPENDS roscpp geometry_msgs std_msgs nav_msgs
 )
 
 include_directories(
