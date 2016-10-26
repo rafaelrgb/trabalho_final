@@ -27,10 +27,10 @@ public:
 
 private:
   virtual void controlLoop();
-  void laserScanCb(const sensor_msgs::LaserScanConstPtr& msg);
+  void sonarCb(const sensor_msgs::LaserScanConstPtr& msg);
   void cmdVelCb(const geometry_msgs::TwistConstPtr& msg);
   void publishVelocity(double vel_x, double vel_theta);
-  ros::Subscriber laser_scan_sub_;
+  ros::Subscriber sonar_sub_;
   ros::Subscriber cmd_vel_sub_;
   ros::Publisher cmd_vel_pub_;
   double vel_x_;

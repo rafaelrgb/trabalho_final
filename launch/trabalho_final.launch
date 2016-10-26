@@ -3,7 +3,6 @@
 
     <arg name="name" default="rafael"/>
     <arg name="port" default="/dev/ttyUSB0"/>
-    <arg name="publish_aria_lasers" default="true"/>
 
      <group ns="$(arg name)">
         <node name="conversor" pkg="trabalho_final" type="conversor" output="screen"/>
@@ -11,7 +10,6 @@
         <node name="evitador_de_colisoes" pkg="trabalho_final" type="evitador_de_colisoes" output="screen"/>
         <node name="RosAria" pkg="rosaria" type="RosAria" output="screen">
             <param name="_port" value="$(arg port)"/>
-            <param name="publish_aria_lasers" type="bool" value="$(arg publish_aria_lasers)" />
         </node>
      </group>
 
