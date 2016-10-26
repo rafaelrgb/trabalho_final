@@ -15,6 +15,7 @@
 #include "Node.h"
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Pose2D.h>
+#include <tf/tf.h>
 
 namespace trabalho_final
 {

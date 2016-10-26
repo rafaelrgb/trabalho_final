@@ -36,7 +36,7 @@ void Conversor::poseCb(const nav_msgs::Odometry::ConstPtr& msg)
 {
   x_ = msg->pose.pose.position.x;
   y_ = msg->pose.pose.position.y;
-  theta_ = 0.0;
+  theta_ = tf::getYaw(msg->pose.pose.orientation);
 }
 
 void Conversor::controlLoop()
