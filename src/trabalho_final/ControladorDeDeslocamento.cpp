@@ -40,7 +40,7 @@ void ControladorDeDeslocamento::pose2DCb(const geometry_msgs::Pose2DConstPtr& ms
 
 void ControladorDeDeslocamento::controlLoop()
 {
-  publishVelocity(150.0, 1.5);
+  publishVelocity(1, 0.0);
 }
 
 void ControladorDeDeslocamento::publishVelocity(double vel_x, double vel_theta)

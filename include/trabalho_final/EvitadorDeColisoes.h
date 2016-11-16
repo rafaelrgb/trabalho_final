@@ -15,6 +15,7 @@
 #include "Node.h"
 #include <std_msgs/Float32MultiArray.h>
 #include <geometry_msgs/Twist.h>
+#include <fl/Headers.h>
 
 namespace trabalho_final
 {
@@ -35,6 +36,18 @@ private:
   ros::Publisher cmd_vel_pub_;
   double vel_x_;
   double vel_theta_;
+  double range_sensor_[8];
+  fl::Engine* engine_;
+  fl::InputVariable* sensor0_;
+  fl::InputVariable* sensor1_;
+  fl::InputVariable* sensor2_;
+  fl::InputVariable* sensor3_;
+  fl::InputVariable* sensor4_;
+  fl::InputVariable* sensor5_;
+  fl::OutputVariable* vel_ang_;
+  fl::OutputVariable* vel_lin_;
+  fl::RuleBlock* rule_block_;
+  int counter_;
 };
 
 }

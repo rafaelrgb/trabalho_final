@@ -1,30 +1,31 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(trabalho_final)
 
-# set(fuzzylite ~/fuzzylite/fuzzylite)
+set(fuzzylite ~/fuzzylite/fuzzylite)
 
 find_package(catkin REQUIRED COMPONENTS
         roscpp
         geometry_msgs
+        sensor_msgs
         std_msgs
         nav_msgs
 )
 
 catkin_package(
         INCLUDE_DIRS include
-        CATKIN_DEPENDS roscpp geometry_msgs std_msgs nav_msgs
+        CATKIN_DEPENDS roscpp geometry_msgs sensor_msgs std_msgs nav_msgs
 )
 
 include_directories(
         include
         ${catkin_INCLUDE_DIRS}
-#        ${fuzzylite}/release/bin
-#        ${fuzzylite}
+        ${fuzzylite}/release/bin
+        ${fuzzylite}
 )
 
 link_directories(
-#	${fuzzylite}/release/bin
-#	${fuzzylite}
+        ${fuzzylite}/release/bin
+        ${fuzzylite}
 )
 
 set(H_FILES
@@ -47,12 +48,12 @@ set(CPP_FILES
 
 add_executable(evitador_de_colisoes src/evitador_de_colisoes.cpp ${CPP_FILES})
 add_dependencies(evitador_de_colisoes ${catkin_EXPORTED_TARGETS})
-target_link_libraries(evitador_de_colisoes ${catkin_LIBRARIES})
+target_link_libraries(evitador_de_colisoes ${catkin_LIBRARIES} fuzzylite)
 
 add_executable(conversor src/conversor.cpp ${CPP_FILES})
 add_dependencies(conversor ${catkin_EXPORTED_TARGETS})
-target_link_libraries(conversor ${catkin_LIBRARIES})
+target_link_libraries(conversor ${catkin_LIBRARIES} fuzzylite)
 
 add_executable(controlador_de_deslocamento src/controlador_de_deslocamento.cpp ${CPP_FILES})
 add_dependencies(controlador_de_deslocamento ${catkin_EXPORTED_TARGETS})
-target_link_libraries(controlador_de_deslocamento ${catkin_LIBRARIES})
+target_link_libraries(controlador_de_deslocamento ${catkin_LIBRARIES} fuzzylite)
