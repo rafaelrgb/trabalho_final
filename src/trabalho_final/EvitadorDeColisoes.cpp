@@ -159,10 +159,11 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   sonar_sub_ = nh->subscribe("RosAria/sonar_range", 1, &EvitadorDeColisoes::sonarCb, this);
   cmd_vel_sub_ = nh->subscribe("cmd_vel", 1, &EvitadorDeColisoes::cmdVelCb, this);
   cmd_vel_pub_ = nh->advertise<geometry_msgs::Twist>("RosAria/cmd_vel", 1);
-  //ROS_INFO("2015100688 - Rafael Gomes Braga"); //exibe na tela o numero de matricula e o nome
-  //ROS_INFO("25510 - Christian Tossani Pedroso de Souza"); //exibe na tela o numero de matricula e o nome
   vel_x_ = 0.0;
   vel_theta_ = 0.0;
+
+  //ROS_INFO("2015100688 - Rafael Gomes Braga"); //exibe na tela o numero de matricula e o nome
+  //ROS_INFO("25510 - Christian Tossani Pedroso de Souza"); //exibe na tela o numero de matricula e o nome
 }
 // ----------------------------------------
 

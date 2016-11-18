@@ -14,7 +14,9 @@
 
 #include "Node.h"
 #include <geometry_msgs/Pose2D.h>
+#include <geometry_msgs/Point32.h>
 #include <geometry_msgs/Twist.h>
+#include <std_msgs/Float64.h>
 
 namespace trabalho_final
 {
@@ -28,9 +30,21 @@ public:
 private:
   virtual void controlLoop();
   void pose2DCb(const geometry_msgs::Pose2DConstPtr& msg);
+  void objectiveCb(const geometry_msgs::Point32ConstPtr& msg);
+  void controlEffortCb(const std_msgs::Float64ConstPtr& msg);
   void publishVelocity(double vel_x, double vel_theta);
+  void publishSetpoint(double theta);
   ros::Subscriber pose_2d_sub_;
+  ros::Subscriber objective_sub_;
+  ros::Subscriber control_effort_sub_;
   ros::Publisher cmd_vel_pub_;
+  ros::Publisher setpoint_pub_;
+
+  double objectiveX_;
+  double objectiveY_;
+  double tolerance_;
+  double vel_x_;
+  double vel_theta_;
 };
 
 }

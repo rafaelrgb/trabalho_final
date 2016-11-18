@@ -15,6 +15,7 @@
 #include "Node.h"
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Pose2D.h>
+#include <std_msgs/Float64.h>
 #include <tf/tf.h>
 
 namespace trabalho_final
@@ -30,8 +31,10 @@ private:
   virtual void controlLoop();
   void poseCb(const nav_msgs::OdometryConstPtr& msg);
   void publishPose2D(double x, double y, double theta);
+  void publishTheta(double theta);
   ros::Subscriber pose_sub_;
   ros::Publisher pose_2d_pub_;
+  ros::Publisher theta_pub_;
   double x_;
   double y_;
   double theta_;
