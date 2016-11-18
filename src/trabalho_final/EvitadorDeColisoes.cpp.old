@@ -21,10 +21,9 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   // ----------------------------------------
   int a = 0;
   int b = 1;
-  int c = 2;
-  int d = 3;
-  int e = 4;
-  int f = 5;
+  int c = 1.5;
+  int d = 2;
+  int e = 5;
 
   using namespace fl;
 
@@ -35,8 +34,8 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   sensor0_->setName("Sensor0");
   sensor0_->setRange(0, 5);
   sensor0_->addTerm(new fl::Trapezoid("PERTO", a, a, b, c));
-  sensor0_->addTerm(new fl::Trapezoid("MEDIO", b, c, d, e));
-  sensor0_->addTerm(new fl::Trapezoid("LONGE", d, e, f, f));
+  sensor0_->addTerm(new fl::Triangle("MEDIO", b, d));
+  sensor0_->addTerm(new fl::Trapezoid("LONGE", c, d, e, e));
   engine_->addInputVariable(sensor0_);
 
   sensor1_ = new fl::InputVariable;
@@ -44,8 +43,8 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   sensor1_->setName("Sensor1");
   sensor1_->setRange(0, 5);
   sensor1_->addTerm(new fl::Trapezoid("PERTO", a, a, b, c));
-  sensor1_->addTerm(new fl::Trapezoid("MEDIO", b, c, d, e));
-  sensor1_->addTerm(new fl::Trapezoid("LONGE", d, e, f, f));
+  sensor1_->addTerm(new fl::Triangle("MEDIO", b, d));
+  sensor1_->addTerm(new fl::Trapezoid("LONGE", c, d, e, e));
   engine_->addInputVariable(sensor1_);
 
   sensor2_ = new fl::InputVariable;
@@ -53,8 +52,8 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   sensor2_->setName("Sensor2");
   sensor2_->setRange(0, 5);
   sensor2_->addTerm(new fl::Trapezoid("PERTO", a, a, b, c));
-  sensor2_->addTerm(new fl::Trapezoid("MEDIO", b, c, d, e));
-  sensor2_->addTerm(new fl::Trapezoid("LONGE", d, e, f, f));
+  sensor2_->addTerm(new fl::Triangle("MEDIO", b, d));
+  sensor2_->addTerm(new fl::Trapezoid("LONGE", c, d, e, e));
   engine_->addInputVariable(sensor2_);
 
   sensor3_ = new fl::InputVariable;
@@ -62,8 +61,8 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   sensor3_->setName("Sensor3");
   sensor3_->setRange(0, 5);
   sensor3_->addTerm(new fl::Trapezoid("PERTO", a, a, b, c));
-  sensor3_->addTerm(new fl::Trapezoid("MEDIO", b, c, d, e));
-  sensor3_->addTerm(new fl::Trapezoid("LONGE", d, e, f, f));
+  sensor3_->addTerm(new fl::Triangle("MEDIO", b, d));
+  sensor3_->addTerm(new fl::Trapezoid("LONGE", c, d, e, e));
   engine_->addInputVariable(sensor3_);
 
   sensor4_ = new fl::InputVariable;
@@ -71,8 +70,8 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   sensor4_->setName("Sensor4");
   sensor4_->setRange(0, 5);
   sensor4_->addTerm(new fl::Trapezoid("PERTO", a, a, b, c));
-  sensor4_->addTerm(new fl::Trapezoid("MEDIO", b, c, d, e));
-  sensor4_->addTerm(new fl::Trapezoid("LONGE", d, e, f, f));
+  sensor4_->addTerm(new fl::Triangle("MEDIO", b, d));
+  sensor4_->addTerm(new fl::Trapezoid("LONGE", c, d, e, e));
   engine_->addInputVariable(sensor4_);
 
   sensor5_ = new fl::InputVariable;
@@ -80,8 +79,8 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   sensor5_->setName("Sensor5");
   sensor5_->setRange(0, 5);
   sensor5_->addTerm(new fl::Trapezoid("PERTO", a, a, b, c));
-  sensor5_->addTerm(new fl::Trapezoid("MEDIO", b, c, d, e));
-  sensor5_->addTerm(new fl::Trapezoid("LONGE", d, e, f, f));
+  sensor5_->addTerm(new fl::Triangle("MEDIO", b, d));
+  sensor5_->addTerm(new fl::Trapezoid("LONGE", c, d, e, e));
   engine_->addInputVariable(sensor5_);
 
   vel_ang_ = new fl::OutputVariable;
@@ -101,8 +100,8 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   vel_lin_->setName("VelLinear");
   vel_lin_->setRange(0, 1);
   vel_lin_->setDefaultValue(fl::nan);
-  vel_lin_->addTerm(new fl::Trapezoid("QPARADO", 0, 0, 0, 0.125));
-  vel_lin_->addTerm(new fl::Triangle("DEVAGAR", 0, 0.5));
+  vel_lin_->addTerm(new fl::Trapezoid("QPARADO", 0, 0, 0.125, 0,375));
+  vel_lin_->addTerm(new fl::Triangle("DEVAGAR", 0.125, 0.625));
   vel_lin_->addTerm(new fl::Triangle("MEDIO", 0.375, 0.875));
   vel_lin_->addTerm(new fl::Trapezoid("RAPIDO", 0.625, 0.875, 1, 1));
   engine_->addOutputVariable(vel_lin_);
@@ -111,52 +110,38 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   rule_block_->setEnabled(true);
   rule_block_->setName("");
 
-  rule_block_->addRule(fl::Rule::parse("if Sensor3 is PERTO and Sensor2 is MEDIO then VelAngular is MESQUERDA", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor3 is PERTO and Sensor2 is LONGE then VelAngular is MESQUERDA", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor4 is PERTO and Sensor2 is MEDIO then VelAngular is MESQUERDA", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor4 is PERTO and Sensor2 is LONGE then VelAngular is MESQUERDA", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor4 is MEDIO and Sensor2 is MEDIO then VelAngular is PESQUERDA", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor4 is MEDIO and Sensor2 is LONGE then VelAngular is PESQUERDA", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor3 is MEDIO and Sensor2 is MEDIO then VelAngular is PESQUERDA", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor3 is MEDIO and Sensor2 is LONGE then VelAngular is PESQUERDA", engine_));
-  //rule_block_->addRule(fl::Rule::parse("if Sensor3 is PERTO and Sensor4 is PERTO then VelAngular is MESQUERDA", engine_));
-  //rule_block_->addRule(fl::Rule::parse("if Sensor3 is MEDIO and Sensor4 is MEDIO then VelAngular is PESQUERDA", engine_));
-  //rule_block_->addRule(fl::Rule::parse("if Sensor3 is LONGE and Sensor4 is PERTO then VelAngular is MESQUERDA", engine_));
-  //rule_block_->addRule(fl::Rule::parse("if Sensor3 is LONGE and Sensor4 is MEDIO then VelAngular is PESQUERDA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor3 is PERTO then VelAngular is MESQUERDA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor3 is MEDIO and Sensor4 is PERTO then VelAngular is MESQUERDA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor3 is MEDIO and Sensor4 is MEDIO then VelAngular is PESQUERDA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor3 is MEDIO and Sensor4 is LONGE then VelAngular is PESQUERDA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor3 is LONGE and Sensor4 is PERTO then VelAngular is MESQUERDA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor3 is LONGE and Sensor4 is MEDIO then VelAngular is PESQUERDA", engine_));
   rule_block_->addRule(fl::Rule::parse("if Sensor3 is LONGE and Sensor4 is LONGE then VelAngular is ZERO", engine_));
 
   rule_block_->addRule(fl::Rule::parse("if Sensor2 is PERTO then VelAngular is MDIREITA", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor1 is PERTO then VelAngular is MDIREITA", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor1 is MEDIO then VelAngular is PDIREITA", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO then VelAngular is PDIREITA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO and Sensor1 is PERTO then VelAngular is MDIREITA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO and Sensor1 is MEDIO then VelAngular is PDIREITA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO and Sensor1 is LONGE then VelAngular is PDIREITA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is LONGE and Sensor1 is PERTO then VelAngular is MDIREITA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is LONGE and Sensor1 is MEDIO then VelAngular is PDIREITA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is LONGE and Sensor1 is LONGE then VelAngular is ZERO", engine_));
 
-  //rule_block_->addRule(fl::Rule::parse("if Sensor3 is PERTO and Sensor2 is PERTO and Sensor0 is PERTO and Sensor5 is PERTO then VelAngular is MESQUERDA", engine_));
 
-  //rule_block_->addRule(fl::Rule::parse("if Sensor2 is LONGE and Sensor1 is PERTO then VelAngular is MDIREITA", engine_));
-  //rule_block_->addRule(fl::Rule::parse("if Sensor2 is LONGE and Sensor1 is MEDIO then VelAngular is PDIREITA", engine_));
-  //rule_block_->addRule(fl::Rule::parse("if Sensor2 is PERTO and Sensor3 is PERTO then VelAngular is MDIREITA", engine_));
-
-  //rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO then VelAngular is PDIREITA", engine_));
-
-  //rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO and Sensor3 is MEDIO and Sensor5 is LONGE "
-  //                                     "then VelAngular is MDIREITA", engine_));
-  //rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO and Sensor3 is MEDIO and Sensor1 is LONGE "
-  //                                     "then VelAngular is MESQUERDA", engine_));
-  //rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO and Sensor3 is MEDIO and Sensor5 is LONGE and Sensor1 is LONGE "
-  //                                     "then VelAngular is MDIREITA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO and Sensor3 is MEDIO and Sensor5 is LONGE "
+                                       "then VelAngular is MDIREITA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO and Sensor3 is MEDIO and Sensor1 is LONGE "
+                                       "then VelAngular is MESQUERDA", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO and Sensor3 is MEDIO and Sensor5 is LONGE and Sensor1 is LONGE "
+                                       "then VelAngular is MDIREITA", engine_));
 
   rule_block_->addRule(fl::Rule::parse("if Sensor2 is PERTO or Sensor3 is PERTO then VelLinear is QPARADO", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor1 is PERTO or Sensor4 is PERTO then VelLinear is QPARADO", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor1 is PERTO or Sensor5 is PERTO then VelLinear is DEVAGAR", engine_));
   rule_block_->addRule(fl::Rule::parse("if Sensor1 is MEDIO then VelLinear is MEDIO", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO then VelLinear is DEVAGAR", engine_));
-  //rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO and Sensor4 is MEDIO then VelLinear is DEVAGAR", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor3 is MEDIO then VelLinear is DEVAGAR", engine_));
-  //rule_block_->addRule(fl::Rule::parse("if Sensor3 is MEDIO and Sensor4 is MEDIO then VelLinear is DEVAGAR", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is MEDIO then VelLinear is MEDIO", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor3 is MEDIO then VelLinear is MEDIO", engine_));
   rule_block_->addRule(fl::Rule::parse("if Sensor4 is MEDIO then VelLinear is MEDIO", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor1 is LONGE and Sensor0 is LONGE then VelLinear is RAPIDO", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor1 is LONGE and Sensor5 is LONGE then VelLinear is RAPIDO", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor2 is LONGE and Sensor0 is LONGE then VelLinear is RAPIDO", engine_));
-  rule_block_->addRule(fl::Rule::parse("if Sensor2 is LONGE and Sensor5 is LONGE then VelLinear is RAPIDO", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor1 is LONGE then VelLinear is RAPIDO", engine_));
+  rule_block_->addRule(fl::Rule::parse("if Sensor2 is LONGE then VelLinear is RAPIDO", engine_));
   rule_block_->addRule(fl::Rule::parse("if Sensor3 is LONGE then VelLinear is RAPIDO", engine_));
   rule_block_->addRule(fl::Rule::parse("if Sensor4 is LONGE then VelLinear is RAPIDO", engine_));
 
@@ -174,10 +159,11 @@ EvitadorDeColisoes::EvitadorDeColisoes(ros::NodeHandle *nh)
   sonar_sub_ = nh->subscribe("RosAria/sonar_range", 1, &EvitadorDeColisoes::sonarCb, this);
   cmd_vel_sub_ = nh->subscribe("cmd_vel", 1, &EvitadorDeColisoes::cmdVelCb, this);
   cmd_vel_pub_ = nh->advertise<geometry_msgs::Twist>("RosAria/cmd_vel", 1);
-  //ROS_INFO("2015100688 - Rafael Gomes Braga"); //exibe na tela o numero de matricula e o nome
-  //ROS_INFO("25510 - Christian Tossani Pedroso de Souza"); //exibe na tela o numero de matricula e o nome
   vel_x_ = 0.0;
   vel_theta_ = 0.0;
+
+  //ROS_INFO("2015100688 - Rafael Gomes Braga"); //exibe na tela o numero de matricula e o nome
+  //ROS_INFO("25510 - Christian Tossani Pedroso de Souza"); //exibe na tela o numero de matricula e o nome
 }
 // ----------------------------------------
 
@@ -232,14 +218,14 @@ EvitadorDeColisoes::~EvitadorDeColisoes()
 
 void EvitadorDeColisoes::sonarCb(const std_msgs::Float32MultiArrayConstPtr& msg)
 {
-//  for (int i = 0; i < msg->data.size(); i++)
-//  {
-//    ROS_INFO("Range %d medido: [%f]", i, msg->data[i]);
-//  }
-  for (int i = 0; i < msg->data.size(); i++)
-  {
-    range_sensor_[i] = msg->data[i];
-  }
+  //  for (int i = 0; i < msg->data.size(); i++)
+  //  {
+  //    ROS_INFO("Range %d medido: [%f]", i, msg->data[i]);
+  //  }
+    for (int i = 0; i < msg->data.size(); i++)
+    {
+      range_sensor_[i] = msg->data[i];
+    }
 
 }
 
@@ -260,8 +246,8 @@ void EvitadorDeColisoes::controlLoop()
   engine_->process();
   double output_ang(vel_ang_->getOutputValue());
   double output_lin(vel_lin_->getOutputValue());
-  //ROS_INFO("Output angular: [%f]", output_ang);
-  //ROS_INFO("Output linear: [%f]", output_lin);
+  ROS_INFO("Output angular: [%f]", output_ang);
+  ROS_INFO("Output linear: [%f]", output_lin);
   vel_x_ =  vel_x_*output_lin;
   vel_theta_ = vel_theta_ + output_ang;
   publishVelocity(vel_x_, vel_theta_);

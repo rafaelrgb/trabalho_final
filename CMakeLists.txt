@@ -57,3 +57,7 @@ target_link_libraries(conversor ${catkin_LIBRARIES} fuzzylite)
 add_executable(controlador_de_deslocamento src/controlador_de_deslocamento.cpp ${CPP_FILES})
 add_dependencies(controlador_de_deslocamento ${catkin_EXPORTED_TARGETS})
 target_link_libraries(controlador_de_deslocamento ${catkin_LIBRARIES} fuzzylite)
+
+add_executable(objective_node src/setpoint_node.cpp ${CPP_FILES})
+add_dependencies(objective_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(objective_node ${catkin_LIBRARIES} fuzzylite)

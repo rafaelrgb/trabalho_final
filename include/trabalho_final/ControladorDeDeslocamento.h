@@ -18,6 +18,8 @@
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Float64.h>
 
+#define PI 3.14159
+
 namespace trabalho_final
 {
 
@@ -34,15 +36,18 @@ private:
   void controlEffortCb(const std_msgs::Float64ConstPtr& msg);
   void publishVelocity(double vel_x, double vel_theta);
   void publishSetpoint(double theta);
+  void publishTheta(double theta);
   ros::Subscriber pose_2d_sub_;
   ros::Subscriber objective_sub_;
   ros::Subscriber control_effort_sub_;
   ros::Publisher cmd_vel_pub_;
   ros::Publisher setpoint_pub_;
+  ros::Publisher theta_pub_;
 
   double objectiveX_;
   double objectiveY_;
-  double tolerance_;
+  double min_tolerance_;
+  double max_tolerance_;
   double vel_x_;
   double vel_theta_;
 };

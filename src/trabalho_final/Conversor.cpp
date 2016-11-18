@@ -19,7 +19,6 @@ Conversor::Conversor(ros::NodeHandle *nh)
 {
   pose_sub_ = nh->subscribe("RosAria/pose", 1, &Conversor::poseCb, this);
   pose_2d_pub_ = nh->advertise<geometry_msgs::Pose2D>("RosAria/pose2D", 1);
-  theta_pub_ = nh->advertise<std_msgs::Float64>("state", 1);
   x_ = 0.0;
   y_ = 0.0;
   theta_ = 0.0;
@@ -29,7 +28,6 @@ Conversor::~Conversor()
 {
   pose_sub_.shutdown();
   pose_2d_pub_.shutdown();
-  theta_pub_.shutdown();
 }
 
 void Conversor::poseCb(const nav_msgs::Odometry::ConstPtr& msg)
@@ -42,7 +40,6 @@ void Conversor::poseCb(const nav_msgs::Odometry::ConstPtr& msg)
 void Conversor::controlLoop()
 {
   publishPose2D(x_, y_, theta_);
-  publishTheta(theta_);
 }
 
 void Conversor::publishPose2D(double x, double y, double theta)
@@ -52,13 +49,6 @@ void Conversor::publishPose2D(double x, double y, double theta)
   msg.y = y;
   msg.theta = theta;
   pose_2d_pub_.publish(msg);
-}
-
-void Conversor::publishTheta(double theta)
-{
-  std_msgs::Float64 msg;
-  msg.data = theta;
-  theta_pub_.publish(msg);
 }
 
 }

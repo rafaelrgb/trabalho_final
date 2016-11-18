@@ -12,22 +12,20 @@
             <param name="_port" value="$(arg port)"/>
         </node>
 
-        <node name="pid_node" pkg="pid" type="controller" output="screen" >
-          <param name="Kp" value="5.0" />
-          <param name="Ki" value="0.0" />
-          <param name="Kd" value="0.1" />
-          <param name="upper_limit" value="10" />
-          <param name="lower_limit" value="-10" />
-          <param name="windup_limit" value="10" />
-          <param name="cutoff_frequency" value="20" />
-          <param name="diagnostic_period" value="0.25" />
-          <param name="max_loop_frequency" value="105.0" />
-          <param name="min_loop_frequency" value="95.0" />
-         </node>
+         <!-- <node name="objective_node" pkg="trabalho_final" type="objective_node" /> -->
      </group>
 
-    <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot"
-    args="/rafael/control_effort /rafael/state /rafael/setpoint" />
+    <node name="pid_node" pkg="pid" type="controller" output="screen" >
+        <param name="Kp" value="1.0" />
+        <param name="Ki" value="0.0" />
+        <param name="Kd" value="0.3" />
+    </node>
 
+<!--
+    <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot"
+    args="/control_effort /state /setpoint" />
+
+    <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" />
+-->
 
 </launch>
